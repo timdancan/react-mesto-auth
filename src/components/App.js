@@ -4,12 +4,13 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup"
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false)
+  // const [selectedCard, setSelectedCard] = 
 
   const changeStateEditProfile = () => {
     setEditProfilePopupOpen(true)
@@ -134,23 +135,6 @@ function App() {
         <ImagePopup />
         <Footer />
       </div>
-
-      <template className="template">
-        <article className="element">
-          <button className="element__trash page-link" type="button"></button>
-          <div className="element__img" role="img" aria-label=""></div>
-          <div className="element__items">
-            <h3 className="element__title"></h3>
-            <div className="element__container">
-              <button
-                className="element__button page-link"
-                type="button"
-              ></button>
-              <span className="element__counter"></span>
-            </div>
-          </div>
-        </article>
-      </template>
     </div>
   );
 }

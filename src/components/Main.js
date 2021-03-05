@@ -1,7 +1,32 @@
 import avatar from '../images/avatar.png'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '../utils/Api'
+import Card from './Card'
 
 const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
+
+  const [userName, setUserName] = useState('Жак-Ив Кусто')
+  const [userDescription, setUserDescription] = useState('Исследователь океана')
+  const [userAvatar, setUserAvatar] = useState(avatar)
+  const [cards, setCards] = useState([])
+
+  useEffect(() => {
+    api.getInitialCards()
+      .then(data => {
+        console.log(data)
+        setCards(data)
+      })
+  }, [])
+
+  useEffect(() => {
+    api.getUserData()
+      .then(data => {
+        setUserName(data.name)
+        setUserDescription(data.about)
+        setUserAvatar(data.avatar)
+      })
+  }, [])
+  
 
   const handleEditAvatarClick = () => {
     onEditAvatar()
@@ -18,7 +43,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
         <div className="profile__content">
           <div className="profile__avatar-container">
             <img
-              src={avatar}
+              src={userAvatar}
               alt="Аватар профиля"
               className="profile__avatar"
             />
@@ -29,14 +54,14 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
           </div>
           <div className="profile__info">
             <div className="profile__text">
-              <h1 className="profile__title">Жак-Ив Кусто</h1>
+              <h1 className="profile__title">{userName}</h1>
               <button
                 className="profile__edit-button page-link"
                 type="button"
                 onClick={handleEditProfileClick}
               ></button>
             </div>
-            <p className="profile__subtitle">Исследователь океана</p>
+            <p className="profile__subtitle">{userDescription}</p>
           </div>
         </div>
         <button
@@ -46,7 +71,13 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
         ></button>
       </section>
 
-      <section className="elements content content_place_elements"></section>
+      <section className="elements content content_place_elements">
+        {
+          cards.map(item => {
+            return <Card key={item._id} {...item}/>
+          })
+        }
+      </section>
     </main>
   );
 };
