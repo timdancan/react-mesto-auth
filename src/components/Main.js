@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import api from '../utils/Api'
 import Card from './Card'
 
-const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
+const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
 
   const [userName, setUserName] = useState('Жак-Ив Кусто')
   const [userDescription, setUserDescription] = useState('Исследователь океана')
@@ -16,6 +16,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
         console.log(data)
         setCards(data)
       })
+      .catch(err => console.log(err))
   }, [])
 
   useEffect(() => {
@@ -25,8 +26,12 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
         setUserDescription(data.about)
         setUserAvatar(data.avatar)
       })
+      .catch(err => console.log(err))
   }, [])
   
+  const handleCardClick = (card) => {
+    onCardClick(card)
+  }
 
   const handleEditAvatarClick = () => {
     onEditAvatar()
@@ -74,7 +79,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar}) => {
       <section className="elements content content_place_elements">
         {
           cards.map(item => {
-            return <Card key={item._id} {...item}/>
+            return <Card key={item._id} {...item} card={item} handleCardClick={handleCardClick}/>
           })
         }
       </section>
