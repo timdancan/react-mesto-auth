@@ -3,6 +3,8 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
+import EditAvatarPopup from "./EditAvatarPopup";
+import EditProfilePopup from "./EditProfilePopup"
 import ImagePopup from "./ImagePopup";
 import { useState, useEffect } from "react";
 import api from "../utils/Api";
@@ -38,6 +40,20 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
   
+  const handleCardLike = card => {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, !isLiked).then(newCard => {
+      setCurrentCards(state => state.map(c => (c._id === card._id ? newCard : c)));
+    });
+  }
+  const handleCardDelete = card => {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCurrentCards(state => state.filter(c => c._id !== card._id))
+      })
+  }
+
   const changeStateEditProfile = () => {
     setEditProfilePopupOpen(true);
   };
@@ -61,6 +77,12 @@ function App() {
     setSelectedCard({ ...selectedCard, isOpen: false });
   };
 
+  const handleUpdateUser = (data) => {
+    api.saveUserChanges(data)
+      .then(data => setCurrentUser(data))
+      closeAllPopups()
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CardContext.Provider value={currentCards}>
@@ -72,61 +94,11 @@ function App() {
               onAddPlace={changeStateAddPlace}
               onEditAvatar={changeStateAvatarProfile}
               onCardClick={handleCardClick}
+              handleCardLike={handleCardLike}
+              handleCardDelete={handleCardDelete}
             />
-            <PopupWithForm
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              id="edit"
-              title="Редактировать профиль"
-              name="edit"
-              buttonText="Сохранить"
-            >
-              <label className="popup__label">
-                <input
-                  type="text"
-                  className="popup__input popup__input_place_title"
-                  id="input-title"
-                  name="Name"
-                  minLength="2"
-                  maxLength="40"
-                  required
-                />
-                <span className="popup__error" id="input-title-error"></span>
-              </label>
-              <label className="popup__label">
-                <input
-                  type="text"
-                  className="popup__input popup__input_place_subtitle"
-                  id="input-subtitle"
-                  name="Profession"
-                  minLength="2"
-                  maxLength="200"
-                  required
-                />
-                <span className="popup__error" id="input-subtitle-error"></span>
-              </label>
-            </PopupWithForm>
-
-            <PopupWithForm
-              id="change"
-              title="Обновить аватар"
-              name="change"
-              buttonText="Сохранить"
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-            >
-              <label className="popup__label popup__label_change">
-                <input
-                  type="url"
-                  className="popup__input popup__input_change"
-                  id="input-change"
-                  name="Url"
-                  placeholder="Ссылка на картинку"
-                  required
-                />
-                <span className="popup__error" id="input-change-error"></span>
-              </label>
-            </PopupWithForm>
+            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
 
             <PopupWithForm
               id="confirm"

@@ -32,10 +32,10 @@ class Api {
       .then(this._checkResponse)
   }
 
-  saveUserChanges(
+  saveUserChanges({
     name,
     about
-  ) {
+  }) {
     return fetch(this._userUrl, {
         method: 'PATCH',
         headers: {
@@ -92,19 +92,9 @@ class Api {
       .then(this._checkResponse)
   }
 
-  likedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          authorization: this._token,
-        }
-      })
-      .then(this._checkResponse)
-  }
-
-  dislikedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-        method: 'DELETE',
+  changeLikeCardStatus(cardId, isNotLiked){
+      return fetch(`${this._likesUrl}/${cardId}`, {
+        method: isNotLiked ? "PUT" : "DELETE",
         headers: {
           authorization: this._token,
         }
