@@ -8,7 +8,7 @@ import EditProfilePopup from "./EditProfilePopup"
 import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup";
 import { useState, useEffect } from "react";
-import api from "../utils/Api";
+import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardContext } from "../contexts/CardContext";
 
