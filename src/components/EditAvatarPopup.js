@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {

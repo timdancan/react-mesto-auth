@@ -1,5 +1,7 @@
 {
   "name": "mesto-react",
+  "author": "Ivanov Danil",
+  "description": "react project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

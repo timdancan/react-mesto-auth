@@ -1,3 +1,5 @@
+// Я хотел бы задать 2 вопроса) У меня не получается выложить на github Pages, я делаю тоже что и с прошлым проектом Mesto, прописываю деплой, создается ветка в гитхабе но когда я открываю ссылку то там белый экран. А второй вопрос по поводу валидации в React, есть какая то статья или видео в которой подробно рассказывают про это? зарание спасибо
+
 import "../pages/index.css";
 import Header from "./Header";
 import Main from "./Main";
@@ -46,15 +48,22 @@ function App() {
   const handleCardLike = card => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, !isLiked).then(newCard => {
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then(newCard => {
       setCurrentCards(state => state.map(c => (c._id === card._id ? newCard : c)));
-    });
+    })
+      .catch((err) => {
+      console.log(err);
+      });
   }
   const handleCardDelete = card => {
     api.deleteCard(card._id)
       .then(() => {
         setCurrentCards(state => state.filter(c => c._id !== card._id))
       })
+      .catch((err) => {
+        console.log(err);
+      });
       closeAllPopups()
   }
 
@@ -89,6 +98,9 @@ function App() {
   const handleUpdateUser = data => {
     api.saveUserChanges(data)
       .then(data => setCurrentUser(data))
+      .catch((err) => {
+        console.log(err);
+      })
       closeAllPopups()
   }
 
@@ -96,6 +108,9 @@ function App() {
     console.log(avatar)
     api.changedAvatar(avatar)
       .then(data => setCurrentUser({ ...currentUser, avatar: data.avatar}))
+      .catch((err) => {
+        console.log(err);
+      });
       closeAllPopups()
   }
 
@@ -103,6 +118,9 @@ function App() {
     console.log(data)
     api.postNewCard(data)
       .then(newCard => setCurrentCards([newCard, ...currentCards]))
+      .catch((err) => {
+        console.log(err);
+      });
       closeAllPopups()
   }
 
