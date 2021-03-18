@@ -2,7 +2,7 @@ import "../pages/index.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
+import ConfirmDeletePopup from "./ConfirmDeletePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import EditProfilePopup from "./EditProfilePopup"
 import AddPlacePopup from "./AddPlacePopup"
@@ -18,6 +18,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isConfirmDeletePopupOpen, setConfirmDeletePopupOpen] = useState({isOpen: false, card: {}});
   const [selectedCard, setSelectedCard] = useState({
     isOpen: false,
     element: {},
@@ -54,6 +55,7 @@ function App() {
       .then(() => {
         setCurrentCards(state => state.filter(c => c._id !== card._id))
       })
+      closeAllPopups()
   }
 
   const changeStateEditProfile = () => {
@@ -68,6 +70,10 @@ function App() {
     setEditAvatarPopupOpen(true);
   };
 
+  const changeStateConfirmeDelete = (card) => {
+    setConfirmDeletePopupOpen({...isConfirmDeletePopupOpen, isOpen: true, card: card});
+  };
+
   const handleCardClick = (card) => {
     setSelectedCard({ isOpen: true, element: card });
   };
@@ -76,6 +82,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
+    setConfirmDeletePopupOpen({...isConfirmDeletePopupOpen, isOpen: false})
     setSelectedCard({ ...selectedCard, isOpen: false });
   };
 
@@ -109,6 +116,7 @@ function App() {
               onEditProfile={changeStateEditProfile}
               onAddPlace={changeStateAddPlace}
               onEditAvatar={changeStateAvatarProfile}
+              onConfirmeDelete={changeStateConfirmeDelete}
               onCardClick={handleCardClick}
               handleCardLike={handleCardLike}
               handleCardDelete={handleCardDelete}
@@ -116,13 +124,8 @@ function App() {
             <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
             <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit}/>
-
-            <PopupWithForm
-              id="confirm"
-              title="Вы уверены?"
-              name="confirm"
-              buttonText="Да"
-            ></PopupWithForm>
+            <ConfirmDeletePopup isOpen={isConfirmDeletePopupOpen} onClose={closeAllPopups} onCardDelete={handleCardDelete}/>
+            
 
             <ImagePopup onClose={closeAllPopups} card={selectedCard} />
             <Footer />

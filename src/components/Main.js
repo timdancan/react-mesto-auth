@@ -3,21 +3,9 @@ import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardContext } from "../contexts/CardContext";
 
-const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, handleCardLike, handleCardDelete }) => {
+const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, handleCardLike, handleCardDelete, onConfirmeDelete }) => {
   const currentUser = useContext(CurrentUserContext);
   const currentCards = useContext(CardContext);
-
-  const handleCardClick = card => {
-    onCardClick(card);
-  };
-
-  const onCardLike = card => {
-    handleCardLike(card)
-  }
-  
-  const onCardDelete = card => {
-    handleCardDelete(card)
-  }
 
   return (
     <main className="main">
@@ -60,9 +48,11 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, handleCard
               key={item._id}
               {...item}
               card={item}
-              handleCardClick={handleCardClick}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
+              handleCardClick={onCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              onConfirmeDelete={onConfirmeDelete}
+              handleConfirmeDelete={onConfirmeDelete}
             />
           );
         })}
