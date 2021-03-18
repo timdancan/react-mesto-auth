@@ -58,7 +58,7 @@ class Api {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          avatar: src.link
+          avatar: src
         })
       })
       .then(this._checkResponse)

@@ -47,7 +47,7 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
           minLength="2"
           maxLength="40"
           onChange={handleNameChange}
-          value={name}
+          value={name || ''}
           required
         />
         <span className="popup__error" id="input-title-error"></span>
@@ -60,7 +60,7 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
           name="Profession"
           minLength="2"
           maxLength="200"
-          value={description}
+          value={description || ''}
           onChange={handleDescriptionChange}
           required
         />

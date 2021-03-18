@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import EditAvatarPopup from "./EditAvatarPopup";
 import EditProfilePopup from "./EditProfilePopup"
+import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup";
 import { useState, useEffect } from "react";
 import api from "../utils/Api";
@@ -27,6 +28,7 @@ function App() {
       .getUserData()
       .then((data) => {
         setCurrentUser(data);
+        console.log(data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -77,9 +79,23 @@ function App() {
     setSelectedCard({ ...selectedCard, isOpen: false });
   };
 
-  const handleUpdateUser = (data) => {
+  const handleUpdateUser = data => {
     api.saveUserChanges(data)
       .then(data => setCurrentUser(data))
+      closeAllPopups()
+  }
+
+  const handleUpdateAvatar = avatar => {
+    console.log(avatar)
+    api.changedAvatar(avatar)
+      .then(data => setCurrentUser({ ...currentUser, avatar: data.avatar}))
+      closeAllPopups()
+  }
+
+  const handleAddPlaceSubmit = data => {
+    console.log(data)
+    api.postNewCard(data)
+      .then(newCard => setCurrentCards([newCard, ...currentCards]))
       closeAllPopups()
   }
 
@@ -98,7 +114,8 @@ function App() {
               handleCardDelete={handleCardDelete}
             />
             <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
+            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit}/>
 
             <PopupWithForm
               id="confirm"
@@ -106,40 +123,6 @@ function App() {
               name="confirm"
               buttonText="Да"
             ></PopupWithForm>
-
-            <PopupWithForm
-              id="add"
-              title="Новое место"
-              name="add"
-              buttonText="Создать"
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-            >
-              <label className="popup__label popup__label_add">
-                <input
-                  type="text"
-                  className="popup__input popup__input_add_name"
-                  id="input-name"
-                  name="Name"
-                  placeholder="Название"
-                  minLength="2"
-                  maxLength="30"
-                  required
-                />
-                <span className="popup__error" id="input-name-error"></span>
-              </label>
-              <label className="popup__label popup__label_add">
-                <input
-                  type="url"
-                  className="popup__input popup__input_add_src"
-                  id="input-url"
-                  name="Url"
-                  placeholder="Ссылка на картинку"
-                  required
-                />
-                <span className="popup__error" id="input-url-error"></span>
-              </label>
-            </PopupWithForm>
 
             <ImagePopup onClose={closeAllPopups} card={selectedCard} />
             <Footer />
