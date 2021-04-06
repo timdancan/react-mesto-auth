@@ -1,6 +1,7 @@
 {
   "name": "mesto-react",
   "author": "Ivanov Danil",
+  "homepage": "https://timdancan.github.io/mesto-react/",
   "description": "react project",
   "version": "0.1.0",
   "private": true,
@@ -10,6 +11,8 @@
     "@testing-library/user-event": "^12.8.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^6.15.5",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.0"
