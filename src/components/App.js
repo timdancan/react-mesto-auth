@@ -131,33 +131,39 @@ function App() {
   const handleUpdateUser = (data) => {
     api
       .saveUserChanges(data)
-      .then((data) => setCurrentUser(data))
+      .then((data) => {
+        setCurrentUser(data)
+        closeAllPopups();
+      })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   };
 
   const handleUpdateAvatar = (avatar) => {
     console.log(avatar);
     api
       .changedAvatar(avatar)
-      .then((data) => setCurrentUser({ ...currentUser, avatar: data.avatar }))
+      .then((data) => {
+        setCurrentUser({ ...currentUser, avatar: data.avatar })
+        closeAllPopups();
+      })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   };
 
   const handleAddPlaceSubmit = (data) => {
     console.log(data);
     api
       .postNewCard(data)
-      .then((newCard) => setCurrentCards([newCard, ...currentCards]))
+      .then((newCard) => {
+        setCurrentCards([newCard, ...currentCards])
+        closeAllPopups();
+      })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   };
 
   const handleRegister = ({ email, password }) => {
@@ -195,13 +201,17 @@ function App() {
 
   const tokenCheck = () => {
     if (localStorage.getItem("token")) {
-      let token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
       getContent(token).then((data) => {
         if (data) {
           setLoggedIn(true);
           history.push("/");
           setEmail(data.data.email)
         }
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem("token");
       });
     }
   };
@@ -246,7 +256,7 @@ function App() {
               </Route>
             </Switch>
 
-            <InfoTooltip isOpen={InfoTooltipOpen} onClose={closeAllPopups} />
+            <InfoTooltip data={InfoTooltipOpen} onClose={closeAllPopups} />
 
             <EditProfilePopup
               isOpen={isEditProfilePopupOpen}

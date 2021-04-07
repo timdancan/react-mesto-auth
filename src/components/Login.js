@@ -26,6 +26,7 @@ export const Login = ({ onLogin }) => {
           name="email"
           type="email"
           onChange={handleChange}
+          value={userData.username}
           placeholder="Email"
           className="sign-input"
         />
@@ -35,6 +36,7 @@ export const Login = ({ onLogin }) => {
           name="password"
           type="password"
           onChange={handleChange}
+          value={userData.password}
           placeholder="Пароль"
           className="sign-input"
         />
