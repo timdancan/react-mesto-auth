@@ -23,4 +23,4 @@
 
 
 **Итоговый вид страницы:** 
-https://timdancan.github.io/mesto-react/
+https://timdancan.github.io/react-mesto-auth/
